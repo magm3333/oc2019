@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,6 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		String[] recursos = "/,/index.html".split(",");
 		http.authorizeRequests().antMatchers(recursos).permitAll().anyRequest().authenticated();
 
+		http.addFilterAfter(new CustomTokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		
 		http.cors().and().httpBasic();
 		http.csrf().disable();
 
